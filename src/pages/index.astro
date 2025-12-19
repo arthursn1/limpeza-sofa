@@ -3,6 +3,16 @@ import PageRenderer from "../components/PageRenderer.astro";
 import type { PageBlock } from "../types/schema";
 import '../styles/global.css'
 
+// IMPORTAR FONTES LOCALMENTE (Melhora muito a performance)
+import '@fontsource/plus-jakarta-sans/400.css';
+import '@fontsource/plus-jakarta-sans/500.css';
+import '@fontsource/plus-jakarta-sans/600.css';
+import '@fontsource/plus-jakarta-sans/700.css';
+import '@fontsource/plus-jakarta-sans/800.css';
+import '@fontsource/space-grotesk/500.css';
+import '@fontsource/space-grotesk/600.css';
+import '@fontsource/space-grotesk/700.css';
+
 // --- IMPORTAÇÃO DE IMAGENS (Assets) ---
 // O Astro otimizará estas imagens automaticamente
 import logoImage from "../assets/logo.png";

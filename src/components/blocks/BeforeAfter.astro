@@ -39,6 +39,8 @@ const { eyebrow, title, description, items, bottomCta } = Astro.props;
               src={item.afterImage} 
               alt={`Depois: ${item.title}`} 
               class="absolute inset-0 w-full h-full object-cover"
+              widths={[400, 800]}
+              sizes="(max-width: 768px) 100vw, 33vw"
             />
             
             <span class="absolute bottom-4 right-4 bg-primary text-primary-foreground text-xs font-bold px-2 py-1 rounded z-10 pointer-events-none shadow-sm transition-opacity duration-300">
@@ -52,6 +54,8 @@ const { eyebrow, title, description, items, bottomCta } = Astro.props;
                 alt={`Antes: ${item.title}`} 
                 class="absolute inset-0 w-full h-full object-cover max-w-none"
                 style="width: 100vw; max-width: none;" 
+                widths={[400, 800]}
+                sizes="(max-width: 768px) 100vw, 33vw"
               />
             </div>
 

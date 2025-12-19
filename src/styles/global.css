@@ -1,6 +1,6 @@
 /* 1. Importação de Fontes e do Framework */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
 @import "tailwindcss";
+
 
 /* 2. Configuração do Tema (Tailwind v4) */
 @theme {

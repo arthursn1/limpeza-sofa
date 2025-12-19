@@ -1,17 +1,17 @@
 ---
 import type { z } from "astro/zod";
 import { HeroSchema } from "../../types/schema";
+// 1. Importa o componente Image
 import { Image } from "astro:assets";
 
 type Props = z.infer<typeof HeroSchema>['props'];
 
-// CORREÇÃO: Pegamos imageDirtyUrl e imageCleanUrl das props (vindo do index)
-// e adicionamos valores padrão para features e arrays para evitar o erro de .map
+// Pegamos as imagens otimizadas vindas do index.astro (imageDirtyUrl, imageCleanUrl)
 const { 
   badge, 
   title, 
   description, 
-  features = [], // Proteção contra erro de .map
+  features = [], 
   primaryCta, 
   secondaryCta, 
   imageDirtyUrl, 
@@ -28,6 +28,7 @@ const {
   <div class="container mx-auto px-4 md:px-6 py-8 md:py-12 relative z-10">
     <div class="grid lg:grid-cols-2 gap-12 items-center">
       
+      {/* DIV DO TEXTO */}
       <div class="space-y-8 order-2 lg:order-1">
         
         {badge && (
@@ -48,7 +49,6 @@ const {
         </p>
         
         <ul class="space-y-3">
-          {/* A proteção features || [] impede o erro se features for undefined */}
           {(features || []).map((item) => (
             <li class="flex items-center gap-3">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-primary flex-shrink-0"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
@@ -77,21 +77,36 @@ const {
         </div>
       </div>
       
+      {/* DIV DA IMAGEM */}
       <div class="relative mt-8 lg:mt-0 order-1 lg:order-2">
         <div class="relative rounded-3xl overflow-hidden shadow-card bg-card aspect-[4/3] group border border-white/20">
           
-          {/* AQUI USAMOS AS VARIÁVEIS RECEBIDAS DO INDEX */}
+          {/* IMAGEM LIMPA (FUNDO) 
+              - loading="eager": Carrega imediatamente
+              - widths: Gera versões menores para mobile
+              - sizes: Diz ao navegador qual tamanho ocupar na tela
+          */}
           <Image 
             src={imageCleanUrl} 
             alt="Sofá limpo" 
             class="absolute inset-0 w-full h-full object-cover"
+            loading="eager"
+            widths={[400, 800, 1200]}
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
 
+          {/* IMAGEM SUJA (PRINCIPAL LCP)
+              - fetchpriority="high": Prioridade máxima
+          */}
           <Image 
             id="dirty-sofa-image"
             src={imageDirtyUrl} 
             alt="Sofá sujo" 
             class="absolute inset-0 w-full h-full object-cover z-10 transition-all duration-[2000ms] ease-in-out [clip-path:inset(0_0_0_0)]"
+            loading="eager"
+            fetchpriority="high"
+            widths={[400, 800, 1200]}
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
           
           <div class="absolute inset-0 bg-gradient-to-t from-foreground/10 to-transparent pointer-events-none z-10"></div>
@@ -122,6 +137,7 @@ const {
     
     if (dirtyImage) {
       setTimeout(() => {
+        // Aplica o corte vindo da esquerda (limpando a sujeira)
         dirtyImage.classList.add('[clip-path:inset(0_0_0_100%)]');
       }, 1000); 
     }
