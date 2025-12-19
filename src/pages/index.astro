@@ -1,11 +1,226 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import PageRenderer from "../components/PageRenderer.astro";
+import type { PageBlock } from "../types/schema";
+import '../styles/global.css'
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// --- IMPORTAÇÃO DE IMAGENS (Assets) ---
+// O Astro otimizará estas imagens automaticamente
+import logoImage from "../assets/logo.png";
+
+// Hero Images
+import heroSofaSujo from "../assets/sofa-sujo.png";
+import heroSofaLimpo from "../assets/sofa-limpo.png";
+
+// Galeria Antes/Depois Images
+// Certifique-se que esses arquivos existem na pasta src/assets
+import sofa3LugaresAntes from "../assets/sofa-3-lugares-antes.png";
+import sofa3LugaresDepois from "../assets/sofa-3-lugares-depois.png";
+import sofaCouroAntes from "../assets/sofa-couro-antes.png";
+import sofaCouroDepois from "../assets/sofa-couro-depois.png";
+import poltronaAntes from "../assets/poltrona-antes.png";
+import poltronaDepois from "../assets/poltrona-depois.png";
+
+const dadosDaPagina: PageBlock[] = [
+  // 1. O Menu no topo
+  {
+    type: "Navbar",
+    props: {
+      logoUrl: logoImage, // Passando a imagem importada
+      logoText: "SofáLimpo", 
+      links: [
+        { label: "Serviços", href: "#servicos" },
+        { label: "Resultados", href: "#resultados" },
+        { label: "Depoimentos", href: "#depoimentos" },
+        { label: "Contato", href: "#contato" }
+      ],
+      ctaText: "Orçamento Grátis",
+      ctaLink: "https://wa.me/5511999999999" 
+    }
+  },
+
+  {
+    type: "Hero",
+    props: {
+      badge: "Atendimento em São Paulo e região",
+      title: "Seu sofá como <span class='text-gradient'>novo em poucas horas</span>",
+      description: "Higienização profissional de sofás, cadeiras, colchões e estofados. Técnicas avançadas para eliminar sujeiras, manchas e maus odores.",
+      features: [
+        "Eliminação de ácaros e bactérias",
+        "Remoção de manchas difíceis",
+        "Secagem rápida em 3-4 horas"
+      ],
+      primaryCta: { text: "Agendar pelo WhatsApp", href: "#" },
+      secondaryCta: {
+        text: "(11) 99999-9999",
+        href: "tel:11999999999"
+      },
+      
+      // Passando as variáveis importadas do Hero
+      imageDirtyUrl: heroSofaSujo,
+      imageCleanUrl: heroSofaLimpo,
+      
+      stats: "+500 clientes"
+    }
+  },
+
+  {
+    type: "Services",
+    props: {
+      eyebrow: "NOSSOS SERVIÇOS",
+      title: "Soluções completas em higienização",
+      description: "Oferecemos serviços especializados para todos os tipos de estofados, sempre com produtos de alta qualidade e técnicos capacitados.",
+      items: [
+        {
+          icon: "sofa",
+          title: "Sofás",
+          description: "Limpeza profunda de todos os tipos de sofás: tecido, couro, suede e mais."
+        },
+        {
+          icon: "chair",
+          title: "Cadeiras e Poltronas",
+          description: "Higienização completa para cadeiras de escritório, poltronas e afins."
+        },
+        {
+          icon: "bed",
+          title: "Colchões",
+          description: "Eliminação de ácaros, manchas e odores para noites de sono mais saudáveis."
+        },
+        {
+          icon: "rug",
+          title: "Tapetes e Carpetes",
+          description: "Limpeza profissional que remove sujeira profunda e revitaliza as fibras."
+        },
+        {
+          icon: "car",
+          title: "Bancos de Carro",
+          description: "Estofamento automotivo limpo e higienizado, eliminando odores e manchas."
+        },
+        {
+          icon: "shield",
+          title: "Impermeabilização",
+          description: "Proteção extra contra líquidos e manchas para seus estofados."
+        }
+      ]
+    }
+  },
+
+  {
+    type: "BeforeAfter",
+    props: {
+      eyebrow: "RESULTADOS REAIS",
+      title: "Veja as transformações",
+      description: "Confira alguns dos nossos trabalhos realizados. Resultados visíveis que fazem a diferença na sua casa.",
+      items: [
+        {
+          title: "Sofá 3 lugares",
+          description: "Remoção de manchas de café e sujeira acumulada",
+          // Usando as variáveis importadas
+          beforeImage: sofa3LugaresAntes,
+          afterImage: sofa3LugaresDepois
+        },
+        {
+          title: "Sofá de couro",
+          description: "Hidratação e limpeza profunda do couro",
+          beforeImage: sofaCouroAntes,
+          afterImage: sofaCouroDepois
+        },
+        {
+          title: "Poltrona",
+          description: "Eliminação de odores e revitalização do tecido",
+          beforeImage: poltronaAntes,
+          afterImage: poltronaDepois
+        }
+      ],
+      bottomCta: "Quer ver seu sofá assim?"
+    }
+  },
+
+  {
+    type: "Testimonials",
+    props: {
+      eyebrow: "DEPOIMENTOS",
+      title: "O que nossos clientes dizem",
+      description: "A satisfação dos nossos clientes é nossa maior conquista. Veja o que eles têm a dizer sobre nosso trabalho.",
+      items: [
+        {
+          name: "Maria Silva",
+          location: "São Paulo - SP",
+          text: "Meu sofá estava com manchas há anos e eu já tinha desistido. O trabalho ficou impecável! Super recomendo.",
+          avatar: "https://randomuser.me/api/portraits/women/44.jpg" // Links externos continuam funcionando
+        },
+        {
+          name: "João Santos",
+          location: "Guarulhos - SP",
+          text: "Profissionais pontuais e muito educados. O colchão ficou como novo, minha alergia melhorou muito!",
+          avatar: "https://randomuser.me/api/portraits/men/32.jpg"
+        },
+        {
+          name: "Ana Costa",
+          location: "Santo André - SP",
+          text: "Contratei para limpar os bancos do carro e fiquei impressionada. Pareciam novos! Preço justo também.",
+          avatar: "https://randomuser.me/api/portraits/women/68.jpg"
+        },
+        {
+          name: "Carlos Oliveira",
+          location: "Osasco - SP",
+          text: "Excelente atendimento do início ao fim. A equipe foi super cuidadosa com meus móveis.",
+          avatar: "https://randomuser.me/api/portraits/men/85.jpg"
+        }
+      ]
+    }
+  },
+
+  {
+    type: "ContactForm",
+    props: {
+      eyebrow: "CONTATO",
+      title: "Solicite seu orçamento",
+      description: "Preencha o formulário abaixo ou entre em contato diretamente pelo WhatsApp para um orçamento rápido e sem compromisso.",
+      info: {
+        phone: "(11) 99999-9999",
+        address: "São Paulo e região metropolitana",
+        hours: "Seg a Sáb, 8h às 18h"
+      },
+      mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.197577884328!2d-46.65205562375836!3d-23.56134856158913!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8da0aa315%3A0xd59f9431f2c9776a!2sAv.%20Paulista%2C%20S%C3%A3o%20Paulo%20-%20SP!5e0!3m2!1spt-BR!2sbr!4v1709123456789!5m2!1spt-BR!2sbr",
+      formLabels: {
+        name: "Nome completo",
+        phone: "WhatsApp / Telefone",
+        message: "Mensagem",
+        button: "Enviar mensagem"
+      }
+    }
+  },
+
+  {
+    type: "Footer",
+    props: {
+      logoUrl: logoImage, // Usando a mesma imagem do topo
+      logoAlt: "SofáLimpo",
+      description: "Especialistas em higienização de estofados. Transformando seu lar com limpeza profissional há mais de 5 anos.",
+      links: [
+        { label: "Serviços", href: "#servicos" },
+        { label: "Resultados", href: "#resultados" },
+        { label: "Depoimentos", href: "#depoimentos" },
+        { label: "Contato", href: "#contato" }
+      ],
+      socials: {
+        instagram: "https://instagram.com",
+        facebook: "https://facebook.com",
+        whatsapp: "https://wa.me/5511999999999"
+      },
+      copyright: "© 2025 SofáLimpo. Todos os direitos reservados."
+    }
+  }
+];
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Limpeza de Sofá</title>
+  </head>
+  <body>
+    <PageRenderer blocks={dadosDaPagina} />
+  </body>
+</html>

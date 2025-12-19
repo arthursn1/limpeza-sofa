@@ -1,0 +1,147 @@
+/* 1. Importação de Fontes e do Framework */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import "tailwindcss";
+
+/* 2. Configuração do Tema (Tailwind v4) */
+@theme {
+  /* Definindo a fonte padrão */
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  
+  /* Mapeando as variáveis CSS para classes do Tailwind */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  
+  --radius: var(--radius);
+
+  --color-whatsapp: var(--whatsapp);
+  --color-whatsapp-foreground: var(--whatsapp-foreground);
+  
+}
+
+
+
+/* 3. Variáveis de Cores (Adicionado HSL para funcionar nativamente) */
+:root {
+  --background: hsl(200 20% 98%);
+  --foreground: hsl(210 40% 15%);
+
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(210 40% 15%);
+
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(210 40% 15%);
+
+  --primary: hsl(175 70% 40%);
+  --primary-foreground: hsl(0 0% 100%);
+
+  --secondary: hsl(175 30% 90%);
+  --secondary-foreground: hsl(175 70% 25%);
+
+  --muted: hsl(200 15% 92%);
+  --muted-foreground: hsl(210 20% 45%);
+
+  --accent: hsl(175 60% 95%);
+  --accent-foreground: hsl(175 70% 30%);
+
+  --destructive: hsl(0 84% 60%);
+  --destructive-foreground: hsl(0 0% 100%);
+
+  --border: hsl(200 20% 88%);
+  --input: hsl(200 20% 88%);
+  --ring: hsl(175 70% 40%);
+  
+  --radius: 0.75rem;
+
+  /* WhatsApp */
+  --whatsapp: hsl(142 70% 45%);
+  --whatsapp-foreground: hsl(0 0% 100%);
+}
+
+.dark {
+  --background: hsl(210 40% 10%);
+  --foreground: hsl(200 20% 98%);
+
+  --card: hsl(210 35% 14%);
+  --card-foreground: hsl(200 20% 98%);
+
+  --popover: hsl(210 35% 14%);
+  --popover-foreground: hsl(200 20% 98%);
+
+  --primary: hsl(175 70% 50%);
+  --primary-foreground: hsl(210 40% 10%);
+
+  --secondary: hsl(175 30% 20%);
+  --secondary-foreground: hsl(175 70% 80%);
+
+  --muted: hsl(210 30% 20%);
+  --muted-foreground: hsl(200 15% 65%);
+
+  --accent: hsl(175 40% 18%);
+  --accent-foreground: hsl(175 70% 75%);
+
+  --destructive: hsl(0 70% 50%);
+  --destructive-foreground: hsl(0 0% 100%);
+
+  --border: hsl(210 30% 22%);
+  --input: hsl(210 30% 22%);
+  --ring: hsl(175 70% 50%);
+}
+
+
+/* 5. Utilitários Customizados */
+@utility text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(135deg, hsl(175 70% 40%), hsl(190 80% 45%));
+}
+
+@utility bg-gradient-hero {
+  background-image: linear-gradient(135deg, hsl(175 70% 40%), hsl(190 80% 45%));
+}
+
+@utility bg-gradient-subtle {
+  background-image: linear-gradient(180deg, hsl(200 20% 98%), hsl(175 30% 96%));
+}
+
+@utility shadow-soft {
+  box-shadow: 0 4px 20px -4px hsl(175 70% 40% / 0.15);
+}
+
+@utility shadow-card {
+  box-shadow: 0 10px 40px -10px hsl(210 40% 15% / 0.1);
+}
+
+/* Animação extra que usamos no Hero (bounce lento) */
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(-5%); }
+  50% { transform: translateY(5%); }
+}
+@utility animate-bounce-slow {
+  animation: bounce-slow 3s infinite ease-in-out;
+}

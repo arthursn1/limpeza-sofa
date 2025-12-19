@@ -1,0 +1,188 @@
+---
+import type { z } from "astro/zod";
+import { BeforeAfterSchema } from "../../types/schema";
+// 1. Importa o componente Image
+import { Image } from "astro:assets";
+
+type Props = z.infer<typeof BeforeAfterSchema>['props'];
+
+const { eyebrow, title, description, items, bottomCta } = Astro.props;
+---
+
+<section id="resultados" class="py-24 bg-muted/50">
+  <div class="container mx-auto px-4">
+    
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      {eyebrow && (
+        <span class="inline-block text-primary font-semibold text-sm uppercase tracking-wider mb-4">
+          {eyebrow}
+        </span>
+      )}
+      <h2 class="font-sans text-3xl md:text-4xl font-bold text-foreground mb-4">
+        {title}
+      </h2>
+      {description && (
+        <p class="text-muted-foreground text-lg">
+          {description}
+        </p>
+      )}
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {items.map((item, index) => (
+        <div class="bg-card rounded-2xl overflow-hidden shadow-card border border-border group flex flex-col">
+          
+          <div class="relative w-full aspect-[4/3] group select-none before-after-container" style="--position: 50%">
+            
+            {/* 2. Substituição: Imagem DEPOIS (Fundo) */}
+            <Image 
+              src={item.afterImage} 
+              alt={`Depois: ${item.title}`} 
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+            
+            <span class="absolute bottom-4 right-4 bg-primary text-primary-foreground text-xs font-bold px-2 py-1 rounded z-10 pointer-events-none shadow-sm transition-opacity duration-300">
+              DEPOIS
+            </span>
+
+            <div class="absolute inset-0 w-full h-full overflow-hidden" style="width: var(--position)">
+              {/* 3. Substituição: Imagem ANTES (Sobreposta e recortada) */}
+              <Image 
+                src={item.beforeImage} 
+                alt={`Antes: ${item.title}`} 
+                class="absolute inset-0 w-full h-full object-cover max-w-none"
+                style="width: 100vw; max-width: none;" 
+              />
+            </div>
+
+            <span class="absolute bottom-4 left-4 bg-foreground/80 text-background text-xs font-bold px-2 py-1 rounded z-20 pointer-events-none shadow-sm transition-opacity duration-300">
+              ANTES
+            </span>
+
+            <input 
+              type="range" 
+              min="0" 
+              max="100" 
+              value="50"
+              class="slider-input absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-30"
+              oninput="this.parentElement.style.setProperty('--position', this.value + '%')"
+            />
+
+            <div class="absolute inset-y-0 pointer-events-none z-20" style="left: var(--position)">
+              <div class="absolute inset-y-0 -ml-px w-0.5 bg-white shadow-sm"></div>
+              
+              <div class="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-primary rounded-full shadow-lg flex items-center justify-center border-2 border-white transition-transform duration-100 hover:scale-110">
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  width="16" 
+                  height="16" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="white" 
+                  stroke-width="2" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round"
+                >
+                  <path d="M12 12h.01"/>
+                  <path d="M16 12h.01"/>
+                  <path d="m17 7 5 5-5 5"/>
+                  <path d="m7 7-5 5 5 5"/>
+                  <path d="M8 12h.01"/>
+                </svg>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="p-5">
+            <h3 class="font-sans text-lg font-bold text-foreground mb-1">{item.title}</h3>
+            <p class="text-sm text-muted-foreground">{item.description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {bottomCta && (
+      <div class="text-center mt-12">
+        <p class="text-muted-foreground">
+          {bottomCta} 
+          <a href="#" class="text-primary font-semibold hover:underline ml-1">Solicite um orçamento grátis</a>
+        </p>
+      </div>
+    )}
+
+  </div>
+</section>
+
+<style>
+  /* Garante que o seletor do script continue funcionando mesmo com a tag gerada pelo Astro */
+  .before-after-container div[style*="width: var(--position)"] img {
+    width: 100%; 
+    height: 100%;
+    max-width: none;
+  }
+</style>
+
+<script>
+  const setupSliders = () => {
+    const containers = document.querySelectorAll('.before-after-container');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const container = entry.target as HTMLElement;
+          if (container.dataset.animated === "true") return;
+          container.dataset.animated = "true";
+          
+          animateSlider(container);
+          
+          observer.unobserve(container);
+        }
+      });
+    }, { threshold: 0.6 });
+
+    containers.forEach(container => {
+      const innerImage = container.querySelector('div[style*="width: var(--position)"] img') as HTMLElement;
+      if(innerImage) {
+        innerImage.style.width = `${container.clientWidth}px`;
+        window.addEventListener('resize', () => {
+          innerImage.style.width = `${container.clientWidth}px`;
+        });
+      }
+      observer.observe(container);
+    });
+  };
+
+  function animateSlider(container: HTMLElement) {
+    const input = container.querySelector('input');
+    const duration = 1400; 
+    let startTime: number | null = null;
+
+    container.style.transition = 'none';
+
+    function frame(currentTime: number) {
+      if (!startTime) startTime = currentTime;
+      
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      const sway = Math.sin(progress * 2 * Math.PI) * 10;
+      const currentValue = 50 + sway;
+
+      if (progress < 1) {
+        container.style.setProperty('--position', `${currentValue}%`);
+        if (input) input.value = currentValue.toString();
+        requestAnimationFrame(frame);
+      } else {
+        container.style.setProperty('--position', `50%`);
+        if (input) input.value = "50";
+        container.style.transition = '';
+      }
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  document.addEventListener('DOMContentLoaded', setupSliders);
+  document.addEventListener('astro:page-load', setupSliders);
+</script>

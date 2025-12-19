@@ -1,0 +1,34 @@
+---
+import type { PageBlock } from "../types/schema";
+import Navbar from "./blocks/Navbar.astro";
+import Hero from "./blocks/Hero.astro";
+import Features from "./blocks/Features.astro";
+import Services from "./blocks/Services.astro";
+import BeforeAfter from "./blocks/BeforeAfter.astro";
+import Testimonials from "./blocks/Testimonials.astro";
+import ContactForm from "./blocks/ContactForm.astro";
+import Footer from "./blocks/Footer.astro";
+
+interface Props {
+  blocks: PageBlock[];
+}
+
+const { blocks } = Astro.props;
+
+// Mapa
+const COMPONENT_MAP = {
+  Navbar: Navbar,
+  Hero: Hero,
+  Services: Services,
+  Features: Features,
+  BeforeAfter: BeforeAfter,
+  Testimonials: Testimonials,
+  ContactForm: ContactForm,
+  Footer: Footer,
+};
+---
+
+{blocks.map((block) => {
+  const Component = COMPONENT_MAP[block.type];
+  return Component ? <Component {...block.props} /> : null;
+})}
