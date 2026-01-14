@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://arthursn1.github.io', 
+  site: 'https://limpezasofa.online/', 
   base: '/limpeza-sofa',
   vite: {
     plugins: [tailwindcss()],
